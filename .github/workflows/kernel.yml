@@ -10,7 +10,7 @@ on:
       KERNEL_TREE:
         description: 'Kernel tree URL'
         required: true
-        default: 'https://github.com/UdyneO2/kernel_realme_qcom'
+        default: 'https://github.com/UdyneO2/device_realme_kernel'
       VENDOR_SOURCE:
         description: 'VENDOR tree URL'
         required: true
@@ -22,7 +22,7 @@ on:
       KERNEL_DEFCONFIG:
         description: 'Kernel defconfig'
         required: true
-        default: 'bengal-perf_defconfig'
+        default: 'vendor/bengal-perf_defconfig'
       KERNEL_IMAGE_NAME:
         description: 'Kernel image name'
         required: true
