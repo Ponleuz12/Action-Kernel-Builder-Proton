@@ -14,7 +14,7 @@ on:
       VENDOR_SOURCE:
         description: 'VENDOR tree URL'
         required: true
-        default: 'https://github.com/UdyneO2/realme_vendor_qcom'
+        default: 'https://github.com/UdyneO2/vendor'
       KERNEL_BRANCH:
         description: 'Kernel tree Branch'
         required: true
@@ -54,8 +54,8 @@ jobs:
           mkdir -p realme
           git clone --depth=1 ${{ inputs.VENDOR_SOURCE }} -b ${{ inputs.KERNEL_BRANCH }} tmp
           cd tmp
-          mv source/android/kernel ../kernel
-          mv source/android/vendor ../vendor
+          mv kernel ../kernel
+          mv vendor ../vendor
          
     - name: Setup Proton
       run: |
