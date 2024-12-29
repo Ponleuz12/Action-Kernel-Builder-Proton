@@ -59,7 +59,7 @@ jobs:
       run: |
           mkdir -p android && cd android
           mkdir -p realme
-          git clone --depth=1 ${{ inputs.VENDOR_SOURCE }} -b ${{ inputs.KERNEL_SOURCE_BRANCH }} tmp
+          git clone --depth=1 ${{ inputs.VENDOR_SOURCE }} -b ${{ inputs.KERNEL_BRANCH }} tmp
           cd tmp
           mv source/android/kernel ../kernel
           mv source/android/vendor ../vendor
