@@ -89,11 +89,11 @@ jobs:
         export CROSS_COMPILE=aarch64-linux-gnu-
         export CROSS_COMPILE_COMPAT=arm-linux-gnueabi-
         if [ -z ${{ inputs.EXTRA_CMDS }} ]; then
-          make -j$(nproc --all) CC=clang O=out LD=ld.lld LLVM=1 ${{ inputs.LLVM_IAS }} ${{ inputs.KERNEL_DEFCONFIG }}
-          make -j$(nproc --all) CC=clang O=out LD=ld.lld LLVM=1 ${{ inputs.LLVM_IAS }} 
+          make -j$(nproc --all) CC=clang O=out ${{ inputs.LLVM_IAS }} ${{ inputs.KERNEL_DEFCONFIG }}
+          make -j$(nproc --all) CC=clang O=out ${{ inputs.LLVM_IAS }} 
         else
-          make -j$(nproc --all) CC=clang O=out LD=ld.lld LLVM=1 ${{ inputs.LLVM_IAS }} ${{ inputs.EXTRA_CMDS }} ${{ inputs.KERNEL_DEFCONFIG }}
-          make -j$(nproc --all) CC=clang O=out LD=ld.lld LLVM=1 ${{ inputs.LLVM_IAS }} ${{ inputs.EXTRA_CMDS }}
+          make -j$(nproc --all) CC=clang O=out ${{ inputs.LLVM_IAS }} ${{ inputs.EXTRA_CMDS }} ${{ inputs.KERNEL_DEFCONFIG }}
+          make -j$(nproc --all) CC=clang O=out ${{ inputs.LLVM_IAS }} ${{ inputs.EXTRA_CMDS }}
         fi
 
     - name: Check Kernel
