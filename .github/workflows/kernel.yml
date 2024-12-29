@@ -66,10 +66,12 @@ jobs:
          
     - name: Setup Proton
       run: |
-        
+        cd android
+        if [ -d $pwd/toolchains/proton-clang ] ; then
+        echo -e "\n lets's go \n"
+        else
         git config --global advice.detachedHead false
         git clone --depth=1 https://github.com/kdrag0n/proton-clang -b ${{ inputs.PROTON_RELEASE }} ./toolchains/proton-clang
-
     - name: Clone Kernel Tree
       run: |
         cd android/realme
