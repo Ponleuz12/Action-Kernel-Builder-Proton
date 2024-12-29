@@ -27,17 +27,10 @@ on:
         description: 'Kernel image name'
         required: true
         default: 'Image.gz'
-      LLVM_IAS:
-        description: 'Use Integrated Assembler?'
-        required: true
-        type: choice
-        default: 'LLVM_IAS=1'
-        options:
-        - LLVM_IAS=1
-        - LLVM_IAS=0
       EXTRA_CMDS:
         description: '(Optional) Extra command separated by a space to be passed directly to make (leave blank if not using).'
         type: string
+        default: AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip
         required: false
 
 jobs:
@@ -90,13 +83,13 @@ jobs:
         export PATH="${GITHUB_WORKSPACE}/android/toolchains/proton-clang/bin:$PATH"
         export ARCH=arm64
         export CROSS_COMPILE=aarch64-linux-gnu-
-        export CROSS_COMPILE_COMPAT=arm-linux-gnueabi-
+        export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
         if [ -z ${{ inputs.EXTRA_CMDS }} ]; then
-          make -j$(nproc --all) CC=clang O=out ${{ inputs.LLVM_IAS }} ${{ inputs.KERNEL_DEFCONFIG }}
-          make -j$(nproc --all) CC=clang O=out ${{ inputs.LLVM_IAS }} 
-        else
-          make -j$(nproc --all) CC=clang O=out ${{ inputs.LLVM_IAS }} ${{ inputs.EXTRA_CMDS }} ${{ inputs.KERNEL_DEFCONFIG }}
-          make -j$(nproc --all) CC=clang O=out ${{ inputs.LLVM_IAS }} ${{ inputs.EXTRA_CMDS }}
+          make -j$(nproc --all) CC=clang O=out ${{ inputs.KERNEL_DEFCONFIG }}
+          make -j$(nproc --all) CC=clang O=out 
+        else 
+          make -j$(nproc --all) CC=clang O=out ${{ inputs.EXTRA_CMDS }} ${{ inputs.KERNEL_DEFCONFIG }}
+          make -j$(nproc --all) CC=clang O=out ${{ inputs.EXTRA_CMDS }}
         fi
 
     - name: Check Kernel
