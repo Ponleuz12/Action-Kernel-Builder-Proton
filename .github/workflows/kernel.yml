@@ -10,15 +10,19 @@ on:
       KERNEL_TREE:
         description: 'Kernel tree URL'
         required: true
-        default: 'https://github.com/carlodandan/android_kernel_realme_sm6225'
+        default: 'https://github.com/UdyneO2/kernel_realme_qcom'
+      VENDOR_SOURCE:
+        description: 'VENDOR tree URL'
+        required: true
+        default: 'https://github.com/UdyneO2/realme_vendor_qcom'
       KERNEL_BRANCH:
         description: 'Kernel tree Branch'
         required: true
-        default: 'lineage-21'
+        default: 'master'
       KERNEL_DEFCONFIG:
         description: 'Kernel defconfig'
         required: true
-        default: 'vendor/sm6225-perf_defconfig'
+        default: 'bengal-perf_defconfig'
       KERNEL_IMAGE_NAME:
         description: 'Kernel image name'
         required: true
@@ -51,16 +55,24 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install bison flex rsync bison device-tree-compiler bc cpio -y
-      
+    - name: Pull vendor
+      run: |
+          mkdir -p android && cd android
+          mkdir -p realme
+          git clone --depth=1 ${{ inputs.VENDOR_SOURCE }} -b ${{ inputs.KERNEL_SOURCE_BRANCH }} tmp
+          cd tmp
+          mv source/android/kernel ../kernel
+          mv source/android/vendor ../vendor
+         
     - name: Setup Proton
       run: |
-        mkdir -p android && cd android
+        
         git config --global advice.detachedHead false
         git clone --depth=1 https://github.com/kdrag0n/proton-clang -b ${{ inputs.PROTON_RELEASE }} ./toolchains/proton-clang
 
     - name: Clone Kernel Tree
       run: |
-        cd android
+        cd android/realme
         git clone --depth=1 ${{ inputs.KERNEL_TREE }} -b ${{ inputs.KERNEL_BRANCH }} ./kernel
 
     - name: Set Properties
@@ -69,7 +81,9 @@ jobs:
 
     - name: Build Kernel
       run: |
-        cd android/kernel
+        cd android/realme/kernel
+        export KBUILD_BUILD_USER="udyne@os"
+        export KBUILD_BUILD_HOST="Dark-perf"
         export PATH="${GITHUB_WORKSPACE}/android/toolchains/proton-clang/bin:$PATH"
         export ARCH=arm64
         export CROSS_COMPILE=aarch64-linux-gnu-
@@ -84,7 +98,7 @@ jobs:
 
     - name: Check Kernel
       run: |
-        cd android
+        cd android/realme
         if [ -f kernel/out/arch/arm64/boot/${{ inputs.KERNEL_IMAGE_NAME }} ]; then
             echo "KERNEL_IS_OK=true" >> $GITHUB_ENV
             echo "KERNEL_VERSION=$(cat kernel/out/include/config/kernel.release)" >> $GITHUB_ENV
@@ -96,7 +110,7 @@ jobs:
     - name: Compress Kernel
       if: env.KERNEL_IS_OK == 'true'
       run: |
-        cd android
+        cd android/realme
         git clone --depth=1 https://github.com/cd-Crypton/AnyKernel3.git -b FOR-ALL
         cp -nf kernel/out/arch/arm64/boot/${{ inputs.KERNEL_IMAGE_NAME }} ${GITHUB_WORKSPACE}/android/AnyKernel3
         cp -nf $(find kernel/out -name '*.ko') ${GITHUB_WORKSPACE}/android/AnyKernel3/modules/system/lib/modules/
@@ -109,9 +123,9 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          android/kernel/out/.config
-          android/kernel/out/arch/arm64/boot/${{ inputs.KERNEL_IMAGE_NAME }}
-          android/AnyKernel3/UPDATE-AnyKernel3-${{ env.BUILD_DATE }}-proton.zip
+          android/realme/kernel/out/.config
+          android/realme/kernel/out/arch/arm64/boot/${{ inputs.KERNEL_IMAGE_NAME }}
+          android/realme/kernel/AnyKernel3/UPDATE-AnyKernel3-${{ env.BUILD_DATE }}-proton.zip
         name: Proton Kernel Build | ${{ env.KERNEL_VERSION }} | ${{ env.BUILD_DATE }}
         tag_name: ${{ github.run_id }}
         body: |
