@@ -91,6 +91,9 @@ jobs:
           make -j$(nproc --all) CC=clang O=out ${{ inputs.EXTRA_CMDS }} ${{ inputs.KERNEL_DEFCONFIG }}
           make -j$(nproc --all) CC=clang O=out ${{ inputs.EXTRA_CMDS }}
         fi
+        echo "start legacy build"
+        make -j$(nproc --all) O=out ARCH=arm64 CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip TARGET_PRODUCT=bengal CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- Image dtbo.img dtb.img
+      
 
     - name: Check Kernel
       run: |
