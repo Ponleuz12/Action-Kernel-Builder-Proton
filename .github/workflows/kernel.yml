@@ -10,10 +10,10 @@ on:
       KERNEL_TREE:
         description: 'Kernel tree URL'
         required: true
-        default: 'https://github.com/UdyneO2/device_realme_kernel'
+        default: 'https://github.com/Ponleuz12/kernel_realme_sm4250'
       VENDOR_SOURCE:
         description: 'VENDOR tree URL'
-        required: true
+        required: false
         default: 'https://github.com/UdyneO2/vendor'
       KERNEL_BRANCH:
         description: 'Kernel tree Branch'
@@ -22,7 +22,7 @@ on:
       KERNEL_DEFCONFIG:
         description: 'Kernel defconfig'
         required: true
-        default: 'vendor/bengal-perf_defconfig'
+        default: 'stock_defconfig'
       KERNEL_IMAGE_NAME:
         description: 'Kernel image name'
         required: true
