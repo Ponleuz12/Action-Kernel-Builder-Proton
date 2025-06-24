@@ -10,7 +10,7 @@ on:
       KERNEL_TREE:
         description: 'Kernel tree URL'
         required: true
-        default: 'https://github.com/Ponleuz12/kernel_realme_sm4250'
+        default: 'https://github.com/Ponleuz12/kernel_realme_sm4250.git'
       VENDOR_SOURCE:
         description: 'VENDOR tree URL'
         required: false
